@@ -11,16 +11,16 @@ if version < 600
   syntax clear
 endif
 
-setlocal isk+=-,=,/,<,>,+,*
+setlocal isk+=-,=,/,<,>,+,*,.
 
 setlocal comments=b:%%
 setlocal formatoptions-=o
 
 syn match twelfBuiltin
-  \ /\(^\|\s\|[.:[\]{}()]\)\@1<=\(=\|->\|<-\)\(\s\|[.:[\]{}()]\|$\)\@=/
+  \ /\(^\|\s\|[:[\]{}()]\)\@1<=\(=\|->\|<-\)\(\s\|[:[\]{}()]\|$\)\@=/
 hi def link twelfBuiltin Keyword
 
-syn match twelfResChar /[.:[\]{}()]/
+syn match twelfResChar /[:[\]{}()]\|\.\>/
 hi def link twelfResChar Delimiter
 
 syn match twelfPcErr /\w\+/ contained
@@ -29,6 +29,7 @@ hi def link twelfPcErr Error
 syn keyword twelfPcDir contained abbrev infix prefix postfix name query
   \ clause tabled querytabled deterministic mode terminates reduces block
   \ worlds total freeze theorem prove establish use covers unique define
+  \ sig struct open view
 hi link twelfPcDir twelfPercent
 
 syn keyword twelfPcUnsafe contained assert trustme thaw
@@ -50,9 +51,9 @@ hi def link twelfPrec Number
 syn keyword twelfType type
 hi def link twelfType Constant
 
-syn match twelfNameDec /\(\(\S\&[^.:[\]{}()]\)\+\)\ze\_s*:/
+syn match twelfNameDec /\(\(\S\&[^:[\]{}()]\)\+\)\ze\_s*:/
 syn match twelfNameDec
-  \ /\(\.\_[^.:]*:\_[^.:]*\)\@<!\(\S\&[^.:[\]{}()]\)\+\ze\_s\+=\_s/
+  \ /\(\.\_[^.:]*:\_[^.:]*\)\@<!\(\S\&[^:[\]{}()]\)\+\ze\_s\+=\_s/
 hi def link twelfNameDec Function
 
 syn match twelfUppercase /\(\<\|\<-\@<=\)\?\u\(\S\&[^.:[\]{}()]\)*/
@@ -74,9 +75,6 @@ hi def link twelfMode Special
 
 syn match twelfUnderscore /\(\S\&[^.:[\]{}()]\)\@<!_\(\S\&[^.:[\]{}()]\)\@!/
 hi def link twelfUnderscore Special
-
-syn match twelfBound /\([{[]\_s*\)\@<=\S\&[^.:\[\]{}()]\+\(\_s*[:}\]]\)\@=/
-hi def link twelfBound Identifier
 
 syn region twelfAfterEOF matchgroup=twelfEOF start=/%\./ end=/\%$/
 hi def link twelfEOF Special
