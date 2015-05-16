@@ -23,20 +23,32 @@ hi def link twelfBuiltin Keyword
 syn match twelfResChar /[:[\]{}()]\|\.\>/
 hi def link twelfResChar Delimiter
 
-syn match twelfPcErr /\w\+/ contained
-hi def link twelfPcErr Error
+syn match twelfPcErr /%\w\+/
+hi def link twelfPcErr SpellBad
 
-syn keyword twelfPcDir contained abbrev infix prefix postfix name query
-  \ clause tabled querytabled deterministic mode terminates reduces block
-  \ worlds total freeze theorem prove establish use covers unique define
-  \ sig struct open view
-hi link twelfPcDir twelfPercent
+syn match twelfDirective /%\(abbrev\|\(in\|pre\|post\)fix\|name\|query\)\>/
+syn match twelfDirective /%\(tabled\|querytabled\|deterministic\)\>/
+syn match twelfDirective /%\(mode\|terminates\|reduces\|block\|worlds\)\>/
+syn match twelfDirective /%\(total\|freeze\|covers\|unique\)\>/
+hi def link twelfDirective PreProc
 
-syn keyword twelfPcUnsafe contained assert trustme thaw
+syn match twelfProof /%\(theorem\|prove\|establish\|solve\|define\)\>/
+hi def link twelfProof Structure
+
+syn match twelfMod /%\(sig\|struct\|open\|view\|include\)\>/
+  \ nextgroup=twelfModNameAlone skipwhite skipnl
+hi def link twelfMod PreProc
+
+syn match twelfModNameAlone contained /\(\S\&[^:.[\]{}()]\)\+/
+  \ nextgroup=twelfModPunc skipwhite skipnl
+hi def link twelfModNameAlone Structure
+
+syn match twelfModPunc contained /:\|=\|:=/
+  \ nextgroup=twelfModNameAlone skipwhite skipnl
+hi link twelfModPunc twelfResChar
+
+syn match twelfPcUnsafe /%\(assert\|trustme\|thaw\)\>/
 hi def link twelfPcUnsafe Debug
-
-syn match twelfPercent /%\w\+/ contains=twelfPc.*
-hi def link twelfPercent PreProc
 
 syn match twelfInfix transparent /%infix/
   \ nextgroup=twelfAssoc skipwhite skipnl
@@ -48,7 +60,7 @@ hi def link twelfAssoc Special
 syn match twelfPrec contained /\d\+/
 hi def link twelfPrec Number
 
-syn keyword twelfType type
+syn match twelfType /\<type\ze\.\?\>/
 hi def link twelfType Constant
 
 syn match twelfNameDec /\(\(\S\&[^:[\]{}()]\)\+\)\ze\_s*:/
@@ -79,3 +91,6 @@ hi def link twelfUnderscore Special
 syn region twelfAfterEOF matchgroup=twelfEOF start=/%\./ end=/\%$/
 hi def link twelfEOF Special
 hi def link twelfAfterEOF Comment
+
+syn match twelfModName /\<\u\k*\ze\.\S/
+hi def link twelfModName Structure
